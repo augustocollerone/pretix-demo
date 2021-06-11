@@ -1,0 +1,27 @@
+version: '2'
+services:
+  db:
+    image: mariadb:latest
+    environment:
+      - MYSQL_DATABASE=pretix
+      - MYSQL_USER=pretix
+      - MYSQL_PASSWORD=pretix
+      - MYSQL_RANDOM_ROOT_PASSWORD=1
+
+  redis:
+    image: redis:latest
+
+  pretix:
+    image: pretix/standalone
+    volumes:
+      - pretix-data:/data
+      - ./etc:/etc/pretix/
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+      - redis
+      
+  
+volumes:
+  pretix-data:
